@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -6,7 +6,6 @@ import Container from "@mui/material/Container";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
-import axios from "axios";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -15,21 +14,18 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import useInput from "../hooks/useInput";
+import useFetch from "../hooks/useFetch";
 
 export default function SimpleContainer() {
   const [inputs, setInputs] = useInput({ country: "TR", year: "2022" });
-  const [holidays, setHolidays] = useState([]);
 
   let url = `https://calendarific.com/api/v2/holidays?&api_key=39e2da70e336b9f3b305de807f1d76a24057c8fb&country=${inputs.country}&year=${inputs.year}&type=national`;
 
-  const getData = async () => {
-    const { data } = await axios.get(url);
-    setHolidays(data.response.holidays);
-  };
+  const [data, loading, getData] = useFetch();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    getData();
+    getData(url);
   };
 
   return (
@@ -82,7 +78,7 @@ export default function SimpleContainer() {
           {inputs.year}
         </Typography>
         <Typography variant="h4" component="h4" align="center">
-          Holidays for {inputs.country.toUpperCase()}
+          Holidays for {inputs.country}
         </Typography>
         <Typography sx={{ textAlign: "center" }}>
           {/* <img src={flag?.filter((c) => c.altSpellings[0] === country.toUpperCase())[0]?.flags.png} alt="" /> */}
@@ -101,30 +97,34 @@ export default function SimpleContainer() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {holidays.map((item, index) => {
-                  const {
-                    country: { name: ctname },
-                    date: { iso },
-                    description: desc,
-                    name: hname,
-                    urlid,
-                  } = item;
-                  return (
-                    <TableRow
-                      key={urlid}
-                      sx={{
-                        backgroundColor: index % 2 ? "#A1A2A6" : "#F0F0F2",
-                      }}
-                    >
-                      <TableCell component="th" scope="row">
-                        {ctname}
-                      </TableCell>
-                      <TableCell align="left">{hname}</TableCell>
-                      <TableCell align="left">{iso}</TableCell>
-                      <TableCell align="left">{desc}</TableCell>
-                    </TableRow>
-                  );
-                })}
+                {loading ? (
+                  <h2>Loading...</h2>
+                ) : (
+                  data?.map((item, index) => {
+                    const {
+                      country: { name: ctname },
+                      date: { iso },
+                      description: desc,
+                      name: hname,
+                      urlid,
+                    } = item;
+                    return (
+                      <TableRow
+                        key={urlid}
+                        sx={{
+                          backgroundColor: index % 2 ? "#A1A2A6" : "#F0F0F2",
+                        }}
+                      >
+                        <TableCell component="th" scope="row">
+                          {ctname}
+                        </TableCell>
+                        <TableCell align="left">{hname}</TableCell>
+                        <TableCell align="left">{iso}</TableCell>
+                        <TableCell align="left">{desc}</TableCell>
+                      </TableRow>
+                    );
+                  })
+                )}
               </TableBody>
             </Table>
           </TableContainer>
