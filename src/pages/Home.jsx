@@ -16,11 +16,22 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
 export default function SimpleContainer() {
-  const [country, setCountry] = useState("");
-  const [year, setYear] = useState("");
+  const [country, setCountry] = useState("TR");
+  const [year, setYear] = useState("2022");
   const [holidays, setHolidays] = useState([]);
 
-  let url = 
+  let url = `https://calendarific.com/api/v2/holidays?&api_key=39e2da70e336b9f3b305de807f1d76a24057c8fb&country=${country}&year=${year}&type=national`;
+
+  const getData = async () => {
+    const { data } = await axios.get(url);
+    setHolidays(data.response.holidays);
+  };
+  console.log(holidays);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    getData();
+  };
 
   return (
     <Container maxWidth="md" sx={{ marginTop: "1rem" }}>
@@ -33,29 +44,26 @@ export default function SimpleContainer() {
           color: "#F0F0F2",
         }}
         component="form"
+        onSubmit={handleSubmit}
       >
         <TextField
           placeholder="Please Enter Country..."
           variant="filled"
+          type="search"
           name="country"
           value={country}
-          type="search"
           InputProps={{ disableUnderline: true }}
-          onChange={(e) => {
-            setCountry(e.target.value);
-          }}
+          onChange={(e) => setCountry(e.target.value)}
         />
         <TextField
           placeholder="Please Enter Year..."
           variant="filled"
           type="number"
+          name="year"
           value={year}
-          name={year}
           InputProps={{ disableUnderline: true }}
           sx={{ marginLeft: "20px", marginRight: "20px" }}
-          onChange={(e) => {
-            setYear(e.target.value);
-          }}
+          onChange={(e) => setYear(e.target.value)}
         />
         <Button
           variant="standard"
@@ -72,10 +80,10 @@ export default function SimpleContainer() {
       </Box>
       <Box>
         <Typography variant="h3" component="h3" align="center">
-          {/* {year} */}
+          {year}
         </Typography>
         <Typography variant="h4" component="h4" align="center">
-          {/* Holidays for {country.toUpperCase()} */}
+          Holidays for {country.toUpperCase()}
         </Typography>
         <Typography sx={{ textAlign: "center" }}>
           {/* <img src={flag?.filter((c) => c.altSpellings[0] === country.toUpperCase())[0]?.flags.png} alt="" /> */}
@@ -94,24 +102,30 @@ export default function SimpleContainer() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {/* {holidays.map((item,index) => {
-            const {country:{name:ctname}, date:{iso} , description : desc, name:hname, urlid } = item
-            return(
-            <TableRow
-              key={urlid}
-              sx={{backgroundColor:
-                index % 2 
-                    ? "#A1A2A6"
-                    : "#F0F0F2",}}
-            >
-              <TableCell component="th" scope="row">
-                {ctname}
-              </TableCell>
-              <TableCell align="left">{hname}</TableCell>
-              <TableCell align="left">{iso}</TableCell>
-              <TableCell align="left">{desc}</TableCell>
-            </TableRow>
-        )})} */}
+                {holidays.map((item, index) => {
+                  const {
+                    country: { name: ctname },
+                    date: { iso },
+                    description: desc,
+                    name: hname,
+                    urlid,
+                  } = item;
+                  return (
+                    <TableRow
+                      key={urlid}
+                      sx={{
+                        backgroundColor: index % 2 ? "#A1A2A6" : "#F0F0F2",
+                      }}
+                    >
+                      <TableCell component="th" scope="row">
+                        {ctname}
+                      </TableCell>
+                      <TableCell align="left">{hname}</TableCell>
+                      <TableCell align="left">{iso}</TableCell>
+                      <TableCell align="left">{desc}</TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             </Table>
           </TableContainer>
