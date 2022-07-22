@@ -14,19 +14,18 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import useInput from "../hooks/useInput";
 
 export default function SimpleContainer() {
-  const [country, setCountry] = useState("TR");
-  const [year, setYear] = useState("2022");
+  const [inputs, setInputs] = useInput({ country: "TR", year: "2022" });
   const [holidays, setHolidays] = useState([]);
 
-  let url = `https://calendarific.com/api/v2/holidays?&api_key=39e2da70e336b9f3b305de807f1d76a24057c8fb&country=${country}&year=${year}&type=national`;
+  let url = `https://calendarific.com/api/v2/holidays?&api_key=39e2da70e336b9f3b305de807f1d76a24057c8fb&country=${inputs.country}&year=${inputs.year}&type=national`;
 
   const getData = async () => {
     const { data } = await axios.get(url);
     setHolidays(data.response.holidays);
   };
-  console.log(holidays);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -51,19 +50,19 @@ export default function SimpleContainer() {
           variant="filled"
           type="search"
           name="country"
-          value={country}
+          value={inputs.country}
           InputProps={{ disableUnderline: true }}
-          onChange={(e) => setCountry(e.target.value)}
+          onChange={setInputs}
         />
         <TextField
           placeholder="Please Enter Year..."
           variant="filled"
           type="number"
           name="year"
-          value={year}
+          value={inputs.year}
           InputProps={{ disableUnderline: true }}
           sx={{ marginLeft: "20px", marginRight: "20px" }}
-          onChange={(e) => setYear(e.target.value)}
+          onChange={setInputs}
         />
         <Button
           variant="standard"
@@ -80,10 +79,10 @@ export default function SimpleContainer() {
       </Box>
       <Box>
         <Typography variant="h3" component="h3" align="center">
-          {year}
+          {inputs.year}
         </Typography>
         <Typography variant="h4" component="h4" align="center">
-          Holidays for {country.toUpperCase()}
+          Holidays for {inputs.country.toUpperCase()}
         </Typography>
         <Typography sx={{ textAlign: "center" }}>
           {/* <img src={flag?.filter((c) => c.altSpellings[0] === country.toUpperCase())[0]?.flags.png} alt="" /> */}
