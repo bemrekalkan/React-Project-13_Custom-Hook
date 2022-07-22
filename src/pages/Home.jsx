@@ -19,8 +19,7 @@ import axios from "axios";
 
 export default function SimpleContainer() {
   const [inputs, setInputs] = useInput({ country: "TR", year: "2022" });
-
-  const [flag, setFlag] = useState("");
+  const [flag, setFlag] = useState([]);
 
   let url = `https://calendarific.com/api/v2/holidays?&api_key=39e2da70e336b9f3b305de807f1d76a24057c8fb&country=${inputs.country}&year=${inputs.year}&type=national`;
 
@@ -29,7 +28,7 @@ export default function SimpleContainer() {
   let url2 = `https://restcountries.com/v3.1/all`;
 
   const getFlag = async () => {
-    const { data } = await axios.get(url);
+    const { data } = await axios.get(url2);
     setFlag(data);
   };
 
@@ -80,6 +79,7 @@ export default function SimpleContainer() {
             color: "#F0F0F2",
             "&:hover": { background: "#6E6F73" },
           }}
+          disabled={!inputs.country || !inputs.year}
         >
           Search
         </Button>
@@ -94,9 +94,8 @@ export default function SimpleContainer() {
         <Typography sx={{ textAlign: "center" }}>
           <img
             src={
-              flag?.filter(
-                (c) => c.altSpellings[0] === inputs.country.toUpperCase()
-              )[0]?.flags.png
+              flag?.filter((c) => c.altSpellings[0] === inputs.country)[0]
+                ?.flags.png
             }
             alt=""
           />
