@@ -99,7 +99,7 @@ export default function SimpleContainer() {
           {inputs.year}
         </Typography>
         <Typography variant="h4" component="h4" align="center">
-          Holidays for {inputs.country}
+          Holidays For {inputs.country}
         </Typography>
         <Typography sx={{ textAlign: "center" }}>
           <img
