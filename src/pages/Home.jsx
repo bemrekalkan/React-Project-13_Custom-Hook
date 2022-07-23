@@ -16,6 +16,8 @@ import Paper from "@mui/material/Paper";
 import useInput from "../hooks/useInput";
 import useFetch from "../hooks/useFetch";
 import axios from "axios";
+import { textAlign } from "@mui/system";
+import { AlignHorizontalCenter } from "@mui/icons-material";
 
 export default function SimpleContainer() {
   const [inputs, setInputs] = useInput({ country: "TR", year: "2022" });
@@ -43,8 +45,8 @@ export default function SimpleContainer() {
       <CssBaseline />
       <Box
         sx={{
-          bgcolor: "#A1A2A6",
-          height: "20vh",
+          bgcolor: "#aab4db",
+          height: "18vh",
           padding: "1rem",
           color: "#F0F0F2",
         }}
@@ -59,6 +61,10 @@ export default function SimpleContainer() {
           value={inputs.country}
           InputProps={{ disableUnderline: true }}
           onChange={setInputs}
+          sx={{
+            marginTop: "0.5rem",
+            marginLeft: "7rem",
+          }}
         />
         <TextField
           placeholder="Please Enter Year..."
@@ -67,7 +73,11 @@ export default function SimpleContainer() {
           name="year"
           value={inputs.year}
           InputProps={{ disableUnderline: true }}
-          sx={{ marginLeft: "20px", marginRight: "20px" }}
+          sx={{
+            marginLeft: "30px",
+            marginRight: "30px",
+            marginTop: "0.5rem",
+          }}
           onChange={setInputs}
         />
         <Button
@@ -75,9 +85,9 @@ export default function SimpleContainer() {
           type="submit"
           sx={{
             border: "1px solid #3B3C40",
-            marginTop: "10px",
+            marginTop: "1rem",
             color: "#F0F0F2",
-            "&:hover": { background: "#6E6F73" },
+            "&:hover": { background: "#103df0" },
           }}
           disabled={!inputs.country || !inputs.year}
         >
