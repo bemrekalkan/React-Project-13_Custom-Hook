@@ -16,8 +16,6 @@ import Paper from "@mui/material/Paper";
 import useInput from "../hooks/useInput";
 import useFetch from "../hooks/useFetch";
 import axios from "axios";
-import { textAlign } from "@mui/system";
-import { AlignHorizontalCenter } from "@mui/icons-material";
 
 export default function SimpleContainer() {
   const [inputs, setInputs] = useInput({ country: "TR", year: "2022" });
